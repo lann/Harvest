@@ -22,6 +22,7 @@ Example::
 		print 'Total hours worked = %f' % total
 
 Example::
+
 	import sys
 	from harvest import Harvest, HarvestError
 	from datetime import datetime, timedelta
@@ -53,6 +54,7 @@ Example::
 		time.sleep(300)
 
 Example::
+
 	for project in h.projects:
 		print project
 		print project.client
@@ -63,6 +65,7 @@ Example::
 			print '\t\ttask:',entry.task
 
 Example::
+
 	for client in h.clients:
 		print client
 		for contact in client.contacts:
