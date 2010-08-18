@@ -165,6 +165,7 @@ class Harvest(object):
             'Authorization':'Basic '+b64encode('%s:%s' % (email,password)),
             'Accept':'application/xml',
             'Content-Type':'application/xml',
+            'User-Agent':'harvest.py',
         }
 
         # create getters
