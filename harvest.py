@@ -93,6 +93,11 @@ class Client(HarvestItemBase):
         for element in self.harvest._get_element_values( url, 'contact' ):
             yield Contact( self.harvest, element )
 
+    def invoices(self):
+        url = '%s?client=%s' % (Invoice.base_url, self.id)
+        for element in self.harvest._get_element_values( url, Invoice.element_name ):
+            yield Invoice( self.harvest, element )
+
     def __str__(self):
         return 'Client: ' + self.name
 
@@ -156,6 +161,36 @@ class Entry(HarvestItemBase):
     @property
     def task(self):
         return self.harvest.task( self.task_id )
+
+
+class Invoice(HarvestItemBase):
+    __metaclass__ = HarvestItemGetterable
+
+    base_url = '/invoices'
+    element_name = 'invoice'
+    plural_name = 'invoices'
+
+    def __str__(self):
+        return 'invoice %d for client %d' % (self.id, self.client_id)
+
+    @property
+    def csv_line_items(self):
+        '''
+        Invoices from lists omit csv-line-items
+
+        '''
+        if not hasattr(self, '_csv_line_items'):
+            url = '%s/%s' % (self.base_url, self.id)
+            self._csv_line_items = self.harvest._get_element_values( url, self.element_name ).next().get('csv-line-items', '')
+        return self._csv_line_items
+
+    @csv_line_items.setter
+    def csv_line_items(self, val):
+        self._csv_line_items = val
+
+    def line_items(self):
+        import csv
+        return csv.DictReader(self.csv_line_items.split('\n'))
 
 
 class Harvest(object):
