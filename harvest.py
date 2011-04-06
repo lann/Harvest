@@ -50,7 +50,7 @@ class Harvest(object):
         
     def _get_items(self, cls, url):
         root = self._request(url)
-        for element in root.findall(cls.element_name):
+        for element in root.findall('.//%s' % cls.element_name):
             yield self._item_from_element(cls, element)
 
     def _item_from_element(self, cls, element):
@@ -152,10 +152,10 @@ class _GettableType(type):
 _item_cache = {}
 def _cache_item(f):
     @functools.wraps(f)
-    def wrapper(cls, obj, id):
+    def wrapper(cls, obj, id, no_cache=False):
         cache_key = '%s(%s)' % (cls.__name__, id)
         result = _item_cache.get(cache_key)
-        if result is None:
+        if result is None or no_cache:
             result = f(cls, obj, id)
             _item_cache[cache_key] = result
         return result
@@ -163,16 +163,19 @@ def _cache_item(f):
 def _cache_items(f):
     @functools.wraps(f)
     def wrapper(cls, obj, **kwargs):
+        no_cache = kwargs.pop('no_cache', False)
+        
         if kwargs:
             cache_key = None
         else:
             cache_key = '%s(all)' % cls.__name__
-
-        if cache_key:
-            # Check for cached list
-            result = _item_cache.get(cache_key, [])
-            if result:
-                return iter(result)
+            
+        # Check for cached list
+        result = _item_cache.get(cache_key, [])
+        if result and not no_cache:
+            for item in result:
+                yield item
+            return
 
         for item in f(cls, obj, **kwargs):
             if hasattr(item, 'id'):
@@ -184,13 +187,14 @@ def _cache_items(f):
         # Only cache if all items consumed
         if cache_key:
             _item_cache[cache_key] = result
+    return wrapper
                 
 class HarvestItemGettable(HarvestItemBase):
     __metaclass__ = _GettableType
     _abstract = True
 
     parent_items = []
-    
+
     @classmethod
     @_cache_item
     def _sub_get(cls, parent, id):
@@ -206,10 +210,12 @@ class HarvestItemGettable(HarvestItemBase):
 class HarvestPrimaryGettable(HarvestItemGettable):    
     _abstract = True
     
+    get_url = None
+    
     @classmethod
     @_cache_item
     def _get(cls, harvest, id):
-        url = _build_url(cls.base_url, id)
+        url = _build_url(cls.get_url or cls.base_url, id)
         return harvest._get_item(cls, url)
         
     @classmethod
@@ -225,7 +231,8 @@ class HarvestPrimaryGettable(HarvestItemGettable):
 class Entry(HarvestPrimaryGettable):
     element_name = 'day_entry'
     plural_name = 'day_entries'
-    base_url = '/daily/show'
+    base_url = '/daily'
+    get_url = '/daily/show'
 
     def __str__(self):
         return 'task %(hours)0.02f hours for project %(project_id)d' % self.__dict__
