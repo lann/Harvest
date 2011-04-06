@@ -282,7 +282,7 @@ class Harvest(object):
                     return parseDate( text )
                 elif entry_type == 'boolean':
                     try:
-                        return bool( text )
+                        return text.strip().lower() in ('true', '1')
                     except ValueError:
                         return False
                 elif entry_type == 'decimal':
