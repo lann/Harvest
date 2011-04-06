@@ -159,6 +159,7 @@ def _cache_item(f):
             result = f(cls, obj, id)
             _item_cache[cache_key] = result
         return result
+    return wrapper
 
 def _cache_items(f):
     @functools.wraps(f)
