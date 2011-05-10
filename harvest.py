@@ -40,7 +40,7 @@ class Harvest(object):
         try:
             return ElementTree.parse(response)
         except ElementTree.ParseError, e:
-            return HarvestError('Parse Error', *e.args)
+            raise HarvestError('Parse Error', *e.args)
     
     def _get_item(self, cls, url):
         try:
