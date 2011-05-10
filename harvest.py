@@ -258,6 +258,11 @@ class Project(HarvestPrimaryGettable):
         url = _build_url(self.base_url, self.id, 'entries', **filters)
         return self.harvest._get_items(Entry, url)
     
+    def expenses(self, start, end, **filters):
+        filters.update({'from': start, 'to': end})
+        url = _build_url(self.base_url, self.id, 'expenses', **filters)
+        return self.harvest._get_items(Expense, url)
+    
 class Task(HarvestPrimaryGettable):
     pass
 
@@ -271,7 +276,7 @@ class ExpenseCategory(HarvestPrimaryGettable):
     plural = 'expense-categories'
 
 class Expense(HarvestItemGettable):
-    parent_items = [Project, User]
+    parent_items = [User]
     
 class UserAssignment(HarvestItemGettable):
     parent_items = [Project]
