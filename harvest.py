@@ -34,7 +34,7 @@ class Harvest(object):
         try:
             response = urllib2.urlopen(request)
         except urllib2.URLError, e:
-            print e
+            print e, url
             raise HarvestConnectionError(*e.args)
 
         try:
@@ -205,6 +205,7 @@ class HarvestItemGettable(HarvestItemBase):
     @classmethod
     @_cache_items
     def _sub_objects(cls, parent, **params):
+        params = dict((k.lstrip('_'), v) for k, v in params.items())
         url = _build_url(parent.base_url, parent.id, cls.base_url, **params)
         return parent.harvest._get_items(cls, url)
     
