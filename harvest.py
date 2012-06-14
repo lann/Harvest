@@ -265,8 +265,8 @@ class Harvest(object):
             r = urllib2.urlopen(request)
             xml = r.read()
             return parseString( xml )
-        except urllib2.URLError:
-            raise HarvestConnectionError()
+        except urllib2.URLError as e:
+            raise HarvestConnectionError(e)
 
     def _get_element_values(self,url,tagname):
         def get_element(element):
