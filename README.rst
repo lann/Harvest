@@ -1,3 +1,10 @@
+This is a rewrite of the original library by `@brianglass`_. If you are interested in
+using it I recommend using `bwitzel's fork`_ which has some improvements
+like **comments** and **tests** (*gasp*).
+
+.. _@brianglass: https://github.com/brianglass
+.. _bwitzel's fork: https://github.com/bwitzel/Harvest
+
 ===================
 Harvest API
 ===================
