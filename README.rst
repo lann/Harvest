@@ -2,7 +2,9 @@
 Harvest API
 ===================
 
-Example::
+Example:
+
+.. code:: python
 
 	from datetime import datetime, timedelta
 	from harvest import Harvest
@@ -21,7 +23,9 @@ Example::
 
 		print 'Total hours worked = %f' % total
 
-Example::
+Example:
+
+.. code:: python
 
 	import sys
 	from harvest import Harvest, HarvestError
@@ -53,7 +57,9 @@ Example::
 
 		time.sleep(300)
 
-Example::
+Example:
+
+.. code:: python
 
 	for project in h.projects:
 		print project
@@ -64,7 +70,9 @@ Example::
 			print '\t',entry
 			print '\t\ttask:',entry.task
 
-Example::
+Example:
+
+.. code:: python
 
 	for client in h.clients:
 		print client
