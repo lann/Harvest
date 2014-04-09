@@ -12,7 +12,7 @@ Example:
 	h = Harvest( 'https://foo.harvestapp.com', 'foo@bar.com', 'mypassword' )
 	user = h.find_user( 'John', 'Doe' )
 	if user:
-		print "The user ID = %d' % user.id
+		print 'The user ID = %d' % user.id
 
 		start = datetime.today()
 		end = start + timedelta(7)
