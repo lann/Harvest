@@ -278,7 +278,7 @@ class Harvest(object):
                         return int( text )
                     except ValueError:
                         return 0
-                elif entry_type in ('date','datetime'):
+                elif entry_type in ('date','datetime','dateTime'):
                     return parseDate( text )
                 elif entry_type == 'boolean':
                     try:
