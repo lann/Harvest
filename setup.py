@@ -4,5 +4,5 @@ setup(
     name='harvest',
     version='1.0',
     py_modules=['harvest'],
-    requires=['python-dateutil'],
+    install_requires=['python-dateutil'],
 )
