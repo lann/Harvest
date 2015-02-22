@@ -1,3 +1,9 @@
+**This project is no longer actively maintained.**
+
+This one is (as of this writing): `lionheart/python-harvest`_
+
+.. _lionheart/python-harvest: https://github.com/lionheart/python-harvest
+
 ===================
 Harvest API
 ===================
